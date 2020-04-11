@@ -1,0 +1,18 @@
+# depslib dependency file v1.0
+1586335595 source:c:\users\perry_the_platipus\desktop\workspace\btl\sdl_utils.cpp
+	"sdl_utils.h"
+	<iostream>
+	<SDL_image.h>
+
+1586163614 c:\users\perry_the_platipus\desktop\workspace\btl\sdl_utils.h
+	<iostream>
+	<SDL.h>
+
+1586574695 source:c:\users\perry_the_platipus\desktop\workspace\btl\main.cpp
+	<iostream>
+	<bits/stdc++.h>
+	<SDL.h>
+	"sdl_utils.h"
+	<cstdlib>
+	<ctime>
+
