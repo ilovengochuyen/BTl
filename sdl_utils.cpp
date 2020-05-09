@@ -1,6 +1,5 @@
 #include "sdl_utils.h"
 #include  <iostream>
-#include <SDL_image.h>
 
 using namespace std;
 

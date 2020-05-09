@@ -16,3 +16,24 @@
 	<cstdlib>
 	<ctime>
 
+1589047107 source:e:\workspace\btl-master\main.cpp
+	<iostream>
+	<bits/stdc++.h>
+	<SDL.h>
+	"sdl_utils.h"
+	"cut1.h"
+	<cstdlib>
+	<ctime>
+
+1586579799 e:\workspace\btl-master\sdl_utils.h
+	<iostream>
+	<SDL.h>
+
+1589045782 source:e:\workspace\btl-master\sdl_utils.cpp
+	"sdl_utils.h"
+	<iostream>
+
+1589047317 e:\workspace\btl-master\cut1.h
+	<iostream>
+	<SDL.h>
+

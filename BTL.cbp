@@ -32,7 +32,9 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="cut1.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="map1.txt" />
 		<Unit filename="sdl_utils.cpp" />
 		<Unit filename="sdl_utils.h" />
 		<Extensions>

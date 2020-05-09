@@ -2,39 +2,18 @@
 #include <bits/stdc++.h>
 #include <SDL.h>
 #include "sdl_utils.h"
+#include "cut1.h"
 #include <cstdlib>
 #include <ctime>
 
 #define fi first
 #define se second
 #define pii pair <int,int>
-#define green 0,0,250,0
-#define blue 00,200,00,00
+
 
 using namespace std;
-//tạo màn hình
-const int size = 9;
-const int SCREEN_WIDTH = 1000;
-const int SCREEN_HEIGHT = 600;
-const int table_width=100;
-const int table_height=60;
-const string WINDOW_TITLE = "An Implementation of Code.org Painter";
-//khai báo biến cục bộ
-static int a[table_width+100][table_height+100];
-int turn =0;
-int speed=10;
 
-struct table
-{
-    int x,y,z,t;
-    make(int a,int b,int c,int d)
-    {
-        x=a;y=b;z=c;t=d;
-    }
-};
-table b[table_width+100][table_height+100];
-
-void initialization(SDL_Window* window, SDL_Renderer* renderer)
+void initialization()
 {
     for(int i=1;i<=table_width;i++)
         for(int j=1;j<=table_height;j++)
@@ -44,31 +23,15 @@ void initialization(SDL_Window* window, SDL_Renderer* renderer)
     for(int i=1;i<=table_width;i++)
         for(int j=1;j<=table_height;j++)
             a[i][j]=0;
-    for(int i=1;i<table_width;i++)
-    {
-        a[i][1]=1;
-        a[i][table_height]=1;
-    }
-    for(int j=1;j<=table_height;j++)
-    {
-        a[1][j]=1;
-        a[table_width][j]=1;
-    }
     for(int i=1;i<=table_width;i++)
         for(int j=1;j<=table_height;j++)
     {
-            SDL_SetRenderDrawColor(renderer,255,255,255,255);
-            SDL_Rect fillrect;
-            fillrect.x=b[i][j].x;
-            fillrect.y=b[i][j].y;
-            fillrect.w=size;
-            fillrect.h=size;
-            SDL_RenderFillRect(renderer, &fillrect);
+        drawColor(i,j,white);
     }
     SDL_RenderPresent(renderer);
 }
 
-void draw_table(SDL_Window* window, SDL_Renderer* renderer)
+void draw_table()
 {
 
 
@@ -86,57 +49,28 @@ void draw_table(SDL_Window* window, SDL_Renderer* renderer)
 
 }
 
-void draw_object(SDL_Window* window, SDL_Renderer* renderer)
+void draw_object()
 {
-    SDL_SetRenderDrawColor(renderer,255,0,0,0);
     for(int i=1;i<=table_width;i++)
         for(int j=1;j<=table_height;j++)
             if(a[i][j]==1)
     {
-            SDL_SetRenderDrawColor(renderer,255,0,0,0);
-            SDL_Rect fillrect;
-            fillrect.x=b[i][j].x;
-            fillrect.y=b[i][j].y;
-            fillrect.w=size;
-            fillrect.h=size;
-            SDL_RenderFillRect(renderer, &fillrect);
+            drawColor(i,j,255,0,0,0);
     }
             else if (a[i][j]==2)
     {
             if (turn %2 )
-                SDL_SetRenderDrawColor(renderer,green);
+                //SDL_SetRenderDrawColor(renderer,green);
+                {
+                    drawColor(i,j,green);
+                }
             else
-                SDL_SetRenderDrawColor(renderer,blue);
-            SDL_Rect fillrect;
-            fillrect.x=b[i][j].x;
-            fillrect.y=b[i][j].y;
-            fillrect.w=size;
-            fillrect.h=size;
-            SDL_RenderFillRect(renderer, &fillrect);
+                //SDL_SetRenderDrawColor(renderer,blue);
+                {
+                    drawColor(i,j,blue);
+                }
     }
     SDL_RenderPresent(renderer);
-}
-
-int X=10,Y=10,stepx=0,stepy=0;
-void left()
-{
-        stepx=-1;
-        stepy=0;
-}
-void right()
-{
-        stepx=+1;
-        stepy=0;
-}
-void up()
-{
-        stepx=0;
-        stepy=-1;
-}
-void down()
-{
-        stepx=0;
-        stepy=+1;
 }
 
 void make_point()
@@ -146,17 +80,13 @@ void make_point()
     do
     {
 	 x =1 + rand()%table_width;
-	 y =1 + rand()%table_height;
+	 y =10 + rand()%(table_height-10);
     }
     while( a[x][y]!=0);
     a[x][y]=2;
 }
 
-//khai báo snake
-int lsnake=1;
-pii snake[100];
-
-void check_point(SDL_Renderer* renderer)
+void check_point()
 {
     pii tg=snake[lsnake];
     for(int i=lsnake;i>=2;i--)
@@ -165,13 +95,7 @@ void check_point(SDL_Renderer* renderer)
     //a[snake[1].fi][snake[1].se]=1;
     //xóa đuôi
     {
-            SDL_SetRenderDrawColor(renderer,255,255,255,255);
-            SDL_Rect fillrect;
-            fillrect.x=b[tg.fi][tg.se].x;
-            fillrect.y=b[tg.fi][tg.se].y;
-            fillrect.w=size;
-            fillrect.h=size;
-            SDL_RenderFillRect(renderer, &fillrect);
+            drawColor(tg.fi,tg.se,white);
             a[tg.fi][tg.se]=0;
     }
 
@@ -182,32 +106,33 @@ void check_point(SDL_Renderer* renderer)
         make_point();
     }
     a[snake[lsnake].fi][snake[lsnake].se]=1;
-
 }
 
-int main(int arg, char *argv[])
+void runSnake()
 {
-    //
-    SDL_Window* window;
-    SDL_Renderer* renderer;
-    initSDL(window, renderer, SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE);
-    SDL_Event e;
-    draw_table(window, renderer);
-    initialization(window, renderer);
-    draw_object(window, renderer);
-    stepx=0;
-    stepy=1;
+    //initSDL(window, renderer, SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE);
+    X=10;Y=10;lsnake=1;
+    stepx=1;stepy=0;
     snake[1]=make_pair(X,Y);
     make_point();
-
     while(true)
     {
-        ++turn;
-        draw_object(window, renderer);
+        ++turn;a[table_width][16]=0;
+        draw_object();
         X+=stepx;
         Y+=stepy;
-        if(X<1 || Y<1 || X>table_width || Y>table_height || a[X][Y]==1) break;
-        check_point(renderer);
+        if(a[X][Y]==1) break;
+        switch (X)
+        {
+            case 0: X=table_width;break;
+            case table_width+1: X=1;break;
+        }
+        switch (Y)
+        {
+            case 0 : Y=table_height;break;
+            case table_height+1: Y=1;break;
+        }
+        check_point();
         a[X][Y]=1;
         SDL_Delay(speed * 10);
         if (SDL_PollEvent(&e) ==0) continue;
@@ -223,10 +148,144 @@ int main(int arg, char *argv[])
             	case SDLK_UP: up(); break;
         		default: break;
 			}
+        }
+    }
+        initialization();
+}
 
+
+int menu()
+{
+    ifstream myfile("map1.txt");
+
+        if (myfile.fail())
+        {
+            std::cout << "Failed to open this file!" << std::endl;
+            return -1;
         }
 
+        for(int i=1;i<=table_width;i++)
+            for(int j=1;j<=table_height;j++)
+                {myfile>>a[i][j];}
+
+        draw_object();
+        drawptr(1);
+        int ok=1;
+
+        while(true)
+        {
+        SDL_Delay(speed * 10);
+        if (SDL_PollEvent(&e) ==0) continue;
+        if (e.type == SDL_QUIT) break;
+        if (e.type == SDL_KEYDOWN)
+        {
+        	switch (e.key.keysym.sym)
+        	{
+
+        		case SDLK_SPACE:return ok; break;
+            	case SDLK_DOWN: if(!ok){drawptr(1);ok=1;}else {drawptr(2);ok=0;} break;
+            	case SDLK_UP: if(!ok){drawptr(1);ok=1;}else {drawptr(2);ok=0;} break;
+        		default: break;
+			}
+        }
+         draw_object();
+        }
+    myfile.close();
+}
+
+int chooseMap()
+{
+    draw_object();
+    initialization();
+    ifstream myfile("mapmap.txt");
+
+        if (myfile.fail())
+        {
+            std::cout << "Failed to open this file!" << std::endl;
+            return -1;
+        }
+
+        for(int i=1;i<=table_width;i++)
+            for(int j=1;j<=table_height;j++)
+                {myfile>>a[i][j];}
+
+        draw_object();
+        drawptr2(1);
+        int ok=1;
+
+        while(true)
+        {
+        SDL_Delay(speed * 10);
+        if (SDL_PollEvent(&e) ==0) continue;
+        if (e.type == SDL_QUIT) break;
+        if (e.type == SDL_KEYDOWN)
+        {
+        	switch (e.key.keysym.sym)
+        	{
+
+        		case SDLK_SPACE:return ok; break;
+            	case SDLK_DOWN: if(ok==2){drawptr2(1);ok=1;}else {drawptr2(2);ok=2;} break;
+            	case SDLK_UP: if(ok==2){drawptr2(1);ok=1;}else {drawptr2(2);ok=2;} break;
+        		default: break;
+			}
+        }
+         draw_object();
+        }
+    myfile.close();
+}
+
+void getmap(int Map)
+{
+    draw_object();
+    initialization();
+    if(Map==1)
+    {
+        for(int i=1;i<=table_width;i++)
+            {
+                a[i][1]=1;
+                a[i][table_height]=1;
+            }
+        for(int j=1;j<=table_height;j++)
+            {
+                a[1][j]=1;
+                a[table_width][j]=1;
+            }
     }
+    else if(Map==2)
+    {
+    ifstream myfile("map2.txt");
+
+        if (myfile.fail())
+        {
+            std::cout << "Failed to open this file!" << std::endl;
+            return ;
+        }
+
+        for(int i=1;i<=table_width;i++)
+            for(int j=1;j<=table_height;j++)
+                {myfile>>a[i][j];}
+        myfile.close();
+    }
+}
+
+int main(int arg, char *argv[])
+{
+    initSDL(window, renderer, SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE);
+    draw_table();
+    initialization();
+    //
+
+    while(true)
+    {
+        int ok=menu();
+        if(ok)
+            {
+                getmap(chooseMap());
+                runSnake();
+            }
+        else break;
+    }
+    //runSnake();
     quitSDL(window,renderer);
     return 0;
 }
