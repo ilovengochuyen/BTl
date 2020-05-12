@@ -9,21 +9,22 @@
 
 #include <iostream>
 #include <SDL.h>
+
 const int size = 9;
 const int SCREEN_WIDTH = 1000;
 const int SCREEN_HEIGHT = 600;
 const int table_width=100;
 const int table_height=60;
+const string WINDOW_TITLE = "An Implementation of Code.org Painter";
 const int tx[]={-3,-2,-1,0,-1,-1};
 const int ty[]={0,0,0,0,-1,1};
-const string WINDOW_TITLE = "An Implementation of Code.org Painter";
+
+//khai báo biến cục bộ
+static int a[table_width+100][table_height+100];
 
     SDL_Window* window;
     SDL_Renderer* renderer;
-
     SDL_Event e;
-//khai báo biến cục bộ
-static int a[table_width][table_height];
 int turn =0;
 int speed=10;
 
@@ -35,11 +36,9 @@ struct table
         x=a;y=b;z=c;t=d;
     }
 };
-table b[table_width][table_height];
-//khai báo snake
+table b[table_width+100][table_height+100];
 int lsnake=1;
 pii snake[1000];
-
 
 void drawColor(int i,int j,int c1,int c2,int c3,int c4)
 {
@@ -92,7 +91,7 @@ void drawptr2(int p)
     }
 }
 
-int X=1,Y=1,stepx=0,stepy=0;
+int X=10,Y=10,stepx=0,stepy=0;
 void left()
 {
         stepx=-1;
