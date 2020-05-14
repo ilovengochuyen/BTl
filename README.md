@@ -10,3 +10,4 @@
         +chạy bằng file main.cpp
 	+cho phép chơi nhiều lần (nhấn phím space để lựa chọn)
 	+cho phép chọn màn chơi
+	+cho phép dừng giữa chừng
