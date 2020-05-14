@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include <bits/stdc++.h>
 #include <SDL.h>
 #include "sdl_utils.h"
@@ -12,6 +13,9 @@
 
 
 using namespace std;
+
+vector <vector<int>> A;
+vector <int> B;
 
 void initialization()
 {
@@ -108,16 +112,42 @@ void check_point()
     a[snake[lsnake].fi][snake[lsnake].se]=1;
 }
 
-void runSnake()
+void creative()
 {
-    //initSDL(window, renderer, SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE);
+    int n=A[online-1][0],tt=1;
+    for(int i=1;i<=n;i++)
+    {
+        int x,y;
+        x=A[online-1][tt++];
+        y=A[online-1][tt++];
+        a[x][y]=1;
+    }
+    online =lsnake;
+}
+
+void stop()
+{
+    cout << 1;
+    while (true)
+    {
+        //if (e.key.keysym.sym== SDLK_SPACE) return;
+        if (SDL_PollEvent(&e) ==0) continue;
+        if (e.type == SDL_KEYDOWN)
+        	if (e.key.keysym.sym) return ;
+    }
+}
+
+void runSnake(int Map)
+{
     X=10;Y=10;lsnake=1;
     stepx=1;stepy=0;
+    online=1;
     snake[1]=make_pair(X,Y);
     make_point();
     while(true)
     {
-        ++turn;a[table_width][16]=0;
+        if(Map==1 && lsnake<=4 && lsnake>online) creative();
+        ++turn;
         draw_object();
         X+=stepx;
         Y+=stepy;
@@ -141,7 +171,7 @@ void runSnake()
         {
         	switch (e.key.keysym.sym)
         	{
-        		case SDLK_ESCAPE: break;
+        		case SDLK_SPACE: stop(); break;
         		case SDLK_LEFT: left(); break;
             	case SDLK_RIGHT: right(); break;
             	case SDLK_DOWN: down(); break;
@@ -171,7 +201,7 @@ int menu()
         draw_object();
         drawptr(1);
         int ok=1;
-
+        myfile.close();
         while(true)
         {
         SDL_Delay(speed * 10);
@@ -190,7 +220,7 @@ int menu()
         }
          draw_object();
         }
-    myfile.close();
+
 }
 
 int chooseMap()
@@ -240,16 +270,30 @@ void getmap(int Map)
     initialization();
     if(Map==1)
     {
-        for(int i=1;i<=table_width;i++)
-            {
-                a[i][1]=1;
-                a[i][table_height]=1;
-            }
-        for(int j=1;j<=table_height;j++)
-            {
-                a[1][j]=1;
-                a[table_width][j]=1;
-            }
+    ifstream myfile("mapl.txt");
+
+        if (myfile.fail())
+        {
+            std::cout << "Failed to open this file!" << std::endl;
+            return ;
+        }
+        int n;int tt=0;
+        while(tt<3)
+        {
+            A.push_back(B);
+            int x;
+            myfile >> n;
+            A[tt].push_back(n);
+            for(int i=1;i<=n*2;i++)
+                {
+                    myfile >> x;
+                    A[tt].push_back(x);
+                }
+            ++tt;
+        }
+        myfile.close();
+
+        runSnake(Map);
     }
     else if(Map==2)
     {
@@ -265,6 +309,7 @@ void getmap(int Map)
             for(int j=1;j<=table_height;j++)
                 {myfile>>a[i][j];}
         myfile.close();
+        runSnake(Map);
     }
 }
 
@@ -273,7 +318,6 @@ int main(int arg, char *argv[])
     initSDL(window, renderer, SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE);
     draw_table();
     initialization();
-    //
 
     while(true)
     {
@@ -281,11 +325,10 @@ int main(int arg, char *argv[])
         if(ok)
             {
                 getmap(chooseMap());
-                runSnake();
             }
         else break;
     }
-    //runSnake();
+
     quitSDL(window,renderer);
     return 0;
 }
