@@ -1,4 +1,5 @@
 # TRSnake
+This the test streak for coding class
 
 The first 8-bit game.
 
